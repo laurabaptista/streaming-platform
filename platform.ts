@@ -103,3 +103,51 @@ const validatePlan = (plan: string): string => {
   }
   return `Plan: ${plan}`;
 };
+
+const generateStatistics = (catalog: Catalog) => {
+  const totalContent = catalog.length;
+  const totalMovies = catalog.filter(
+    (content) => content.type === "filme",
+  ).length;
+  const totalSeries = catalog.filter(
+    (content) => content.type === "serie",
+  ).length;
+  const averageDuration = totalDuration(catalog) / totalContent;
+  const averageRating =
+    catalog.reduce((sum, content) => sum + content.rating, 0) / totalContent;
+
+  return {
+    totalContent,
+    totalMovies,
+    totalSeries,
+    averageDuration,
+    averageRating,
+  };
+};
+
+const processResponse = (response: ApiResponse): void => {
+  if (response.success) {
+    console.log(`Success: ${response.data.length} items received`);
+  } else {
+    console.log(`Error ${response.code}: ${response.message}`);
+  }
+};
+
+const groupByGenre = (catalog: Catalog) => {
+  const groups: {
+    ACAO?: Content[];
+    COMEDIA?: Content[];
+    DRAMA?: Content[];
+    TERROR?: Content[];
+    DOCUMENTARIO?: Content[];
+  } = {};
+
+  catalog.forEach((content) => {
+    if (!groups[content.genre]) {
+      groups[content.genre] = [];
+    }
+    groups[content.genre]!.push(content);
+  });
+
+  return groups;
+};
