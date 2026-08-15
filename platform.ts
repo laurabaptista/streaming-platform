@@ -245,9 +245,9 @@ const userList: User[] = [
   },
 ];
 
-const anna = userList[0];
-const charles = userList[1];
-const martha = userList[2];
+const anna = userList[0]!;
+const charles = userList[1]!;
+const martha = userList[2]!;
 
 const profileList: Profile[] = [
   {
@@ -264,3 +264,42 @@ const profileList: Profile[] = [
     favorites: ["2", "3", "6"],
   },
 ];
+
+// findById
+console.log(findById(contentList, 1));
+console.log(findById(contentList, 99));
+
+// filterByGenre
+console.log(filterByGenre(contentList, Genre.Drama));
+
+// filterByType
+console.log(filterByType(contentList, "series"));
+
+// sortByRating
+console.log(sortByRating(contentList));
+
+// totalDuration
+console.log(totalDuration(contentList));
+
+// canWatch
+console.log(canWatch(anna, contentList[0]!));
+console.log(canWatch(martha, contentList[0]!));
+
+// addFavorite
+console.log(addFavorite(profileList[0]!, 4));
+
+// registerView
+console.log(registerView(profileList[0]!, 4, 80));
+
+// validatePlan
+console.log(validatePlan(SubscriptionPlan.Standard));
+
+// generateStatistics
+console.log(generateStatistics(contentList));
+
+// processResponse
+processResponse({ success: true, data: contentList });
+processResponse({ success: false, message: "Server unavailable", code: 500 });
+
+// groupByGenre
+console.log(groupByGenre(contentList));
