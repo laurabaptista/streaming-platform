@@ -55,3 +55,51 @@ type Error = {
 };
 
 type ApiResponse = Success | Error;
+
+const findById = (catalog: Catalog, id: number = 0): Content | undefined =>
+  catalog.find((content) => content.id === id);
+
+const filterByGenre = (catalog: Catalog, genre: Genre): Content[] =>
+  catalog.filter((content) => content.genre === genre);
+
+const filterByType = (catalog: Catalog, type: "filme" | "serie"): Content[] =>
+  catalog.filter((content) => content.type === type);
+
+const sortByRating = (catalog: Catalog): Content[] =>
+  [...catalog].sort((a, b) => b.rating - a.rating);
+
+const totalDuration = (catalog: Catalog): number =>
+  catalog.reduce((sum, content) => sum + content.duration, 0);
+
+const canWatch = (user: User, content: Content): boolean => {
+  if (user.plan === SubscriptionPlan.Free) {
+    return content.rating < 3;
+  }
+  return true;
+};
+
+const addFavorite = (profile: Profile, contentId: number): Profile => ({
+  ...profile,
+  favorites: [...profile.favorites, contentId.toString()],
+});
+
+const registerView = (
+  profile: Profile,
+  contentId: number,
+  percentage: number,
+): Profile => {
+  const date = new Date().toISOString().substring(0, 10);
+  const newEntry: ViewingHistory = [contentId, date, percentage];
+
+  return {
+    ...profile,
+    history: [...profile.history, newEntry],
+  };
+};
+
+const validatePlan = (plan: string): string => {
+  if (!Object.values(SubscriptionPlan).includes(plan as SubscriptionPlan)) {
+    throw new Error("Invalid Plan");
+  }
+  return `Plan: ${plan}`;
+};
