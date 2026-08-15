@@ -14,7 +14,7 @@ interface Content {
   year: number;
   duration: number;
   rating: 1 | 2 | 3 | 4 | 5;
-  type: "filme" | "serie";
+  type: "movie" | "series";
   genre: Genre;
   actors: string[];
   seasons?: number;
@@ -27,11 +27,11 @@ enum SubscriptionPlan {
 }
 
 enum Genre {
-  Action = "ACAO",
-  Comedy = "COMEDIA",
+  Action = "ACTION",
+  Comedy = "COMEDY",
   Drama = "DRAMA",
-  Horror = "TERROR",
-  Documentary = "DOCUMENTARIO",
+  Horror = "HORROR",
+  Documentary = "DOCUMENTARY",
 }
 
 type Catalog = Content[];
@@ -62,7 +62,7 @@ const findById = (catalog: Catalog, id: number = 0): Content | undefined =>
 const filterByGenre = (catalog: Catalog, genre: Genre): Content[] =>
   catalog.filter((content) => content.genre === genre);
 
-const filterByType = (catalog: Catalog, type: "filme" | "serie"): Content[] =>
+const filterByType = (catalog: Catalog, type: "movie" | "series"): Content[] =>
   catalog.filter((content) => content.type === type);
 
 const sortByRating = (catalog: Catalog): Content[] =>
@@ -99,7 +99,7 @@ const registerView = (
 
 const validatePlan = (plan: string): string => {
   if (!Object.values(SubscriptionPlan).includes(plan as SubscriptionPlan)) {
-    throw new Error("Invalid Plan");
+    throw new Error("Invalid plan");
   }
   return `Plan: ${plan}`;
 };
@@ -107,10 +107,10 @@ const validatePlan = (plan: string): string => {
 const generateStatistics = (catalog: Catalog) => {
   const totalContent = catalog.length;
   const totalMovies = catalog.filter(
-    (content) => content.type === "filme",
+    (content) => content.type === "movie",
   ).length;
   const totalSeries = catalog.filter(
-    (content) => content.type === "serie",
+    (content) => content.type === "series",
   ).length;
   const averageDuration = totalDuration(catalog) / totalContent;
   const averageRating =
@@ -135,11 +135,11 @@ const processResponse = (response: ApiResponse): void => {
 
 const groupByGenre = (catalog: Catalog) => {
   const groups: {
-    ACAO?: Content[];
-    COMEDIA?: Content[];
+    ACTION?: Content[];
+    COMEDY?: Content[];
     DRAMA?: Content[];
-    TERROR?: Content[];
-    DOCUMENTARIO?: Content[];
+    HORROR?: Content[];
+    DOCUMENTARY?: Content[];
   } = {};
 
   catalog.forEach((content) => {
@@ -151,3 +151,116 @@ const groupByGenre = (catalog: Catalog) => {
 
   return groups;
 };
+
+const contentList: Content[] = [
+  {
+    id: 1,
+    title: "The Matrix",
+    year: 1999,
+    duration: 136,
+    rating: 5,
+    type: "movie",
+    genre: Genre.Action,
+    actors: ["Keanu Reeves", "Laurence Fishburne"],
+  },
+  {
+    id: 2,
+    title: "The Office",
+    year: 2005,
+    duration: 22,
+    rating: 4,
+    type: "series",
+    genre: Genre.Comedy,
+    actors: ["Steve Carell", "John Krasinski"],
+    seasons: 9,
+  },
+  {
+    id: 3,
+    title: "Breaking Bad",
+    year: 2008,
+    duration: 47,
+    rating: 5,
+    type: "series",
+    genre: Genre.Drama,
+    actors: ["Bryan Cranston", "Aaron Paul"],
+    seasons: 5,
+  },
+  {
+    id: 4,
+    title: "Hereditary",
+    year: 2018,
+    duration: 127,
+    rating: 3,
+    type: "movie",
+    genre: Genre.Horror,
+    actors: ["Toni Collette"],
+  },
+  {
+    id: 5,
+    title: "Free Solo",
+    year: 2018,
+    duration: 100,
+    rating: 5,
+    type: "movie",
+    genre: Genre.Documentary,
+    actors: ["Alex Honnold"],
+  },
+  {
+    id: 6,
+    title: "Peaky Blinders",
+    year: 2013,
+    duration: 55,
+    rating: 2,
+    type: "series",
+    genre: Genre.Drama,
+    actors: ["Cillian Murphy"],
+    seasons: 6,
+  },
+];
+
+const userList: User[] = [
+  {
+    id: 1,
+    name: "Anna Smith",
+    email: "anna@example.com",
+    verified: true,
+    registrationDate: "2024-01-10",
+    plan: SubscriptionPlan.Free,
+  },
+  {
+    id: 2,
+    name: "Charles Newman",
+    email: "charles@example.com",
+    verified: true,
+    registrationDate: "2023-06-22",
+    plan: SubscriptionPlan.Standard,
+  },
+  {
+    id: 3,
+    name: "Martha Coast",
+    email: "martha@example.com",
+    verified: false,
+    registrationDate: "2025-03-05",
+    plan: SubscriptionPlan.Premium,
+  },
+];
+
+const anna = userList[0];
+const charles = userList[1];
+const martha = userList[2];
+
+const profileList: Profile[] = [
+  {
+    ...anna,
+    history: [
+      [1, "2026-07-01", 100],
+      [3, "2026-07-05", 45],
+    ],
+    favorites: ["1", "5"],
+  },
+  {
+    ...charles,
+    history: [[2, "2026-06-15", 100]],
+    favorites: ["2", "3", "6"],
+  },
+];
